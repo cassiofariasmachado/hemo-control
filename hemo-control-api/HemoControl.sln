@@ -4,7 +4,7 @@ VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{48AD32FF-B64A-4DDB-9942-F0F6CD006281}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HemoControl", "src\Hemocontrol\HemoControl.csproj", "{6DF8F99D-08DE-4FD8-A20C-BFCFCF4A3705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HemoControl", "src\HemoControl\HemoControl.csproj", "{6DF8F99D-08DE-4FD8-A20C-BFCFCF4A3705}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{61BC6054-FAD8-4CBB-B5B0-F596EFC35F0B}"
 EndProject
