@@ -1,0 +1,8 @@
+language: csharp
+solution: hemo-control-api/HemoControl.sln
+mono: latest
+dotnet: 2.0.0
+script: 
+  - cd hemo-control-api
+  - dotnet build
+  - dotnet test tests/HemoControl.Test
