@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Hemocontrol\HemoControl.csproj" />
+    <ProjectReference Include="..\..\src\HemoControl\HemoControl.csproj" />
   </ItemGroup>
 
 </Project>
