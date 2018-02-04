@@ -2,7 +2,16 @@ language: csharp
 solution: hemo-control-api/HemoControl.sln
 mono: latest
 dotnet: 2.0.0
-script: 
+
+before_install:
+  - wget -O sonar.zip https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/4.0.2.892/sonar-scanner-msbuild-4.0.2.892.zip
+  - unzip -qq sonar.zip -d hemo-control-api
+  - ls -l hemo-control-api
+  - chmod +x hemo-control-api/sonar-scanner-3.0.3.778/bin/sonar-scanner
+
+script:
   - cd hemo-control-api
+  - mono ./SonarQube.Scanner.MSBuild.exe begin /k:"hemo-control" /d:sonar.organization="cassiofariasmachado-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${SONAR_TOKEN}
   - dotnet build
   - dotnet test tests/HemoControl.Test
+  - mono ./SonarQube.Scanner.MSBuild.exe end /d:sonar.login=${SONAR_TOKEN}
