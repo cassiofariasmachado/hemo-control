@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -33,15 +34,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v2
+
     - name: Scan
       working-directory: hemo-control-api
-      run: docker run -it \
-                      --rm \
-                      -w /app \
-                      -v $(pwd):/app \
-                      -e PROJECT_KEY=${PROJECT_KEY} \
-                      -e SONAR_ORGANIZATION=${SONAR_ORGANIZATION} \
-                      -e SONAR_URL=${SONAR_URL} \
-                      -e SONAR_SECRET=${SONAR_SECRET} \
-                      cassiofariasmachado/dotnet-sonarscanner:latest \
-                      sh scripts/sonar-scan.sh
+      env:
+        PROJECT_KEY: ${{ secrets.PROJECT_KEY }}
+        SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+        SONAR_URL: ${{ secrets.SONAR_URL }}
+        SONAR_SECRET: ${{ secrets.SONAR_SECRET }}
+      run: docker run --rm	
+                      -w /app	
+                      -v $(pwd):/app	
+                      -e PROJECT_KEY=${PROJECT_KEY}	
+                      -e SONAR_ORGANIZATION=${SONAR_ORGANIZATION}	
+                      -e SONAR_URL=${SONAR_URL}	
+                      -e SONAR_SECRET=${SONAR_SECRET}	
+                      cassiofariasmachado/dotnet-sonarscanner:latest	
+                      sh scripts/sonar-scan.sh 
+      
