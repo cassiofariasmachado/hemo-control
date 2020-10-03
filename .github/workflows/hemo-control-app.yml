@@ -57,6 +57,7 @@ jobs:
       working-directory: hemo-control-app
       env:
         PROJECT_KEY: hemo-control-app
+        SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
         SONAR_URL: ${{ secrets.SONAR_URL }}
         SONAR_SECRET: ${{ secrets.SONAR_SECRET }}
       run: npm run sonar-scan
