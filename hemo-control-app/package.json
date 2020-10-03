@@ -8,7 +8,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest",
-    "sonar-scan": "sonar-scanner -D:sonar.projectKey=$PROJECT_KEY -D:sonar.organization=$SONAR_ORGANIZATION -D:sonar.host.url=$SONAR_URL -D:sonar.login=$SONAR_SECRET"
+    "sonar-scan": "sonar-scanner -Dsonar.projectKey=$PROJECT_KEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
