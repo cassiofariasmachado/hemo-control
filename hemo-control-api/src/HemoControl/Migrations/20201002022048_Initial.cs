@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
 
 namespace HemoControl.Migrations
 {
@@ -13,13 +11,15 @@ namespace HemoControl.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 100, nullable: false),
                     Birthday = table.Column<DateTime>(nullable: true),
                     Email = table.Column<string>(maxLength: 30, nullable: false),
-                    LastName = table.Column<string>(maxLength: 100, nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Weigth = table.Column<decimal>(nullable: false)
+                    Username = table.Column<string>(maxLength: 100, nullable: false),
+                    Password = table.Column<string>(maxLength: 60, nullable: false),
+                    Weigth = table.Column<decimal>(type: "decimal(19,5)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,28 +27,28 @@ namespace HemoControl.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Infusion",
+                name: "Infusions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BleedingLocal = table.Column<string>(maxLength: 50, nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(nullable: false),
+                    UserWeigth = table.Column<decimal>(type: "decimal(19,5)", nullable: false),
+                    FactorUnity = table.Column<int>(nullable: false),
                     FactorBrand = table.Column<string>(maxLength: 50, nullable: false),
                     FactorLot = table.Column<string>(maxLength: 20, nullable: false),
-                    FactorUnity = table.Column<int>(nullable: false),
-                    IsBleeding = table.Column<bool>(nullable: false),
                     IsHemarthrosis = table.Column<bool>(nullable: false),
+                    IsBleeding = table.Column<bool>(nullable: false),
                     IsTreatmentContinuation = table.Column<bool>(nullable: false),
+                    BleedingLocal = table.Column<string>(maxLength: 50, nullable: false),
                     TreatmentLocal = table.Column<string>(maxLength: 50, nullable: false),
-                    UserId = table.Column<int>(nullable: true),
-                    UserWeigth = table.Column<decimal>(nullable: false)
+                    UserId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Infusion", x => x.Id);
+                    table.PrimaryKey("PK_Infusions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Infusion_Users_UserId",
+                        name: "FK_Infusions_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -56,25 +56,15 @@ namespace HemoControl.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Infusion_Id",
-                table: "Infusion",
-                column: "Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Infusion_UserId",
-                table: "Infusion",
+                name: "IX_Infusions_UserId",
+                table: "Infusions",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Id",
-                table: "Users",
-                column: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Infusion");
+                name: "Infusions");
 
             migrationBuilder.DropTable(
                 name: "Users");

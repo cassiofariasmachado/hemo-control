@@ -6,16 +6,17 @@ namespace HemoControl.Database.Configuration
 {
     public class InfusionConfiguration : IEntityTypeConfiguration<Infusion>
     {
-         public void Configure(EntityTypeBuilder<Infusion> builder)
-         {
+        public void Configure(EntityTypeBuilder<Infusion> builder)
+        {
             builder.HasKey(i => i.Id);
 
             builder.Property(i => i.Date)
                 .IsRequired();
 
             builder.Property(i => i.UserWeigth)
+                .HasColumnType("decimal(19,5)")
                 .IsRequired();
-            
+
             builder.Property(i => i.FactorUnity)
                 .IsRequired();
 
@@ -43,8 +44,6 @@ namespace HemoControl.Database.Configuration
             builder.Property(i => i.TreatmentLocal)
                 .HasMaxLength(50)
                 .IsRequired();
-
-            builder.HasIndex("Id");
-         }
+        }
     }
 }

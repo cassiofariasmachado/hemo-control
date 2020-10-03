@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HemoControl", "src\HemoCont
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{61BC6054-FAD8-4CBB-B5B0-F596EFC35F0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HemoControl.Test", "tests\HemoControl.Test\HemoControl.Test.csproj", "{E6D36042-55CF-4BEB-A7AB-2955645F98BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HemoControl.Test", "test\HemoControl.Test\HemoControl.Test.csproj", "{E6D36042-55CF-4BEB-A7AB-2955645F98BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

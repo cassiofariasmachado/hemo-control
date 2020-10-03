@@ -20,18 +20,27 @@ namespace HemoControl.Database.Configuration
                 .HasMaxLength(100)
                 .IsRequired();
 
+            builder.Property(u => u.Username)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            builder.Property(u => u.Password)
+                .HasMaxLength(60)
+                .IsRequired();
+
             builder.Property(u => u.Email)
                 .HasMaxLength(30)
                 .IsRequired();
 
             builder.Property(u => u.Weigth)
-                .IsRequired();
+                .HasColumnType("decimal(19,5)");
 
-            builder.HasMany(u => u.Infusions);
+            builder.HasMany(u => u.Infusions)
+                .WithOne();
 
-            builder.HasIndex("Id");
+            builder.Metadata.FindNavigation("Infusions")
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
         }
-
     }
 
 }

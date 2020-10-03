@@ -18,10 +18,10 @@ namespace HemoControl.Controllers
 
         [HttpPost]
         [Route("{email}")]
-        public IActionResult AddInfusion(string email, [FromBody]AddInfusionModel model) 
+        public IActionResult AddInfusion(string email, [FromBody] AddInfusionModel model)
         {
             var user = this._context.Users.FirstOrDefault(u => u.Email == email);
-            var infusion = new Infusion(model.Date, model.UserWeigth, model.FactorUnity, model.FactorBrand, 
+            var infusion = new Infusion(model.Date, model.UserWeigth, model.FactorUnity, model.FactorBrand,
                 model.FactorLot, model.IsHemarthrosis, model.IsBleeding, model.IsTreatmentContinuation, model.BleedingLocal, model.TreatmentLocal);
             user.AddInfusion(infusion);
 
