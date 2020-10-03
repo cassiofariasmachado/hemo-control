@@ -39,7 +39,7 @@ jobs:
     - name: Scan
       working-directory: hemo-control-api
       env:
-        PROJECT_KEY: ${{ secrets.PROJECT_KEY }}
+        PROJECT_KEY: hemo-control-api
         SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
         SONAR_URL: ${{ secrets.SONAR_URL }}
         SONAR_SECRET: ${{ secrets.SONAR_SECRET }}
