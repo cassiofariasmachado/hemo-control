@@ -1,0 +1,47 @@
+name: Hemo Control API
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+
+    - name: Install dependencies
+      working-directory: hemo-control-api
+      run: dotnet restore
+
+    - name: Build
+      working-directory: hemo-control-api
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      working-directory: hemo-control-api
+      run: dotnet test --no-restore --verbosity normal
+
+  sonar-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Scan
+      working-directory: hemo-control-api
+      run: docker run -it \
+                      --rm \
+                      -w /app \
+                      -v $(pwd):/app \
+                      -e PROJECT_KEY=${PROJECT_KEY} \
+                      -e SONAR_ORGANIZATION=${SONAR_ORGANIZATION} \
+                      -e SONAR_URL=${SONAR_URL} \
+                      -e SONAR_SECRET=${SONAR_SECRET} \
+                      cassiofariasmachado/dotnet-sonarscanner:latest \
+                      sh scripts/sonar-scan.sh
