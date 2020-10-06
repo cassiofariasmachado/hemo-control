@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using HemoControl.Database;
 using HemoControl.Interfaces.Services;
+using HemoControl.Middlewares;
 using HemoControl.Services;
 using HemoControl.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -113,6 +114,8 @@ namespace HemoControl
                 c.IncludeXmlComments(xmlPath);
             });
 
+            services.AddTransient<ExceptionMiddleware>();
+
             services.AddControllers();
         }
 
@@ -137,6 +140,8 @@ namespace HemoControl
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 

@@ -1,7 +1,7 @@
 using HemoControl.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace HemoControl.Models.Users.Login
+namespace HemoControl.Models.Users
 {
     public class AccessTokenResponse
     {

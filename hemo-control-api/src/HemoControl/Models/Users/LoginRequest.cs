@@ -1,4 +1,4 @@
-namespace HemoControl.Models.Users.Login
+namespace HemoControl.Models.Users
 {
     public class LoginRequest
     {

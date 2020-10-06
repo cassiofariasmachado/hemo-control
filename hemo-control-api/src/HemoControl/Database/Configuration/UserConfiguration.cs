@@ -36,7 +36,7 @@ namespace HemoControl.Database.Configuration
                 .HasColumnType("decimal(19,5)");
 
             builder.HasMany(u => u.Infusions)
-                .WithOne();
+                .WithOne(i => i.User);
 
             builder.Metadata.FindNavigation("Infusions")
                 .SetPropertyAccessMode(PropertyAccessMode.Field);

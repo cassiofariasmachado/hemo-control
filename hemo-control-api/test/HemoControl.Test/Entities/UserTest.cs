@@ -113,8 +113,17 @@ namespace HemoControl.Test.Entities
         [Fact]
         public void AddInfusion()
         {
-            var infusion = new Infusion(new DateTime(), _user.Weigth.GetValueOrDefault(), 2000, "Baxter", "XXX-123",
-                true, true, true, "Cotovelo D", "Casa");
+            var factor = new Factor("Baxter", 2000, "ABC-123");
+            var infusion = new Infusion(
+                DateTime.Now,
+                factor,
+                true,
+                true,
+                true,
+                "Cotovelo D",
+                "Casa",
+                _user
+            );
 
             _user.AddInfusion(infusion);
 

@@ -8,13 +8,9 @@ namespace HemoControl.Entities
 
         public DateTime Date { get; private set; }
 
-        public decimal UserWeigth { get; private set; }
+        public decimal? UserWeigth { get; private set; }
 
-        public int FactorUnity { get; private set; }
-
-        public string FactorBrand { get; private set; }
-
-        public string FactorLot { get; private set; }
+        public Factor Factor { get; private set; }
 
         public bool IsHemarthrosis { get; private set; }
 
@@ -26,22 +22,65 @@ namespace HemoControl.Entities
 
         public string TreatmentLocal { get; private set; }
 
+        public User User { get; private set; }
+
         private Infusion() { }
 
-        public Infusion(DateTime date, decimal userWeigth, int factorUnity, string factorBrand,
-            string factorLot, bool isHemarthrosis, bool isBleeding, bool isTreatmentContinuation,
-            string bleedingLocal, string treatmentLocal)
+        public Infusion(
+            DateTime date,
+            Factor factor,
+            bool isHemarthrosis,
+            bool isBleeding,
+            bool isTreatmentContinuation,
+            string bleedingLocal,
+            string treatmentLocal,
+            User user
+        )
         {
-            this.Date = date;
-            this.UserWeigth = userWeigth;
-            this.FactorUnity = factorUnity;
-            this.FactorBrand = factorBrand;
-            this.FactorLot = factorLot;
-            this.IsHemarthrosis = isHemarthrosis;
-            this.IsBleeding = isBleeding;
-            this.IsTreatmentContinuation = isTreatmentContinuation;
-            this.BleedingLocal = bleedingLocal;
-            this.TreatmentLocal = treatmentLocal;
+            Date = date;
+            UserWeigth = user.Weigth;
+            Factor = factor;
+            IsHemarthrosis = isHemarthrosis;
+            IsBleeding = isBleeding;
+            IsTreatmentContinuation = isTreatmentContinuation;
+            BleedingLocal = bleedingLocal;
+            TreatmentLocal = treatmentLocal;
+            User = user;
+        }
+
+        public void ChangeDate(DateTime date)
+        {
+            Date = date;
+        }
+
+        public void ChangeFactor(Factor factor)
+        {
+            Factor = factor;
+        }
+
+        public void ChangeIsHemarthrosis(bool isHemarthrosis)
+        {
+            IsHemarthrosis = isHemarthrosis;
+        }
+
+        public void ChangeIsTreatmentContinuation(bool isTreatmentContinuation)
+        {
+            IsTreatmentContinuation = isTreatmentContinuation;
+        }
+
+        public void ChangeIsBleeding(bool isBleeding)
+        {
+            IsBleeding = isBleeding;
+        }
+
+        public void ChangeBleedingLocal(string bleedingLocal)
+        {
+            BleedingLocal = bleedingLocal;
+        }
+
+        public void ChangeTreatmentLocal(string treatmentLocal)
+        {
+            TreatmentLocal = treatmentLocal;
         }
     }
 }

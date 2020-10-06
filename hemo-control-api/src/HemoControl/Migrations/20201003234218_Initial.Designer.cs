@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HemoControl.Migrations
 {
     [DbContext(typeof(HemoControlContext))]
-    [Migration("20201002022048_Initial")]
+    [Migration("20201003234218_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,19 +36,6 @@ namespace HemoControl.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FactorBrand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("FactorLot")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
-
-                    b.Property<int>("FactorUnity")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsBleeding")
                         .HasColumnType("bit");
 
@@ -66,7 +53,7 @@ namespace HemoControl.Migrations
                     b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("UserWeigth")
+                    b.Property<decimal?>("UserWeigth")
                         .HasColumnType("decimal(19,5)");
 
                     b.HasKey("Id");
@@ -121,9 +108,40 @@ namespace HemoControl.Migrations
 
             modelBuilder.Entity("HemoControl.Entities.Infusion", b =>
                 {
-                    b.HasOne("HemoControl.Entities.User", null)
+                    b.HasOne("HemoControl.Entities.User", "User")
                         .WithMany("Infusions")
                         .HasForeignKey("UserId");
+
+                    b.OwnsOne("HemoControl.Entities.Factor", "Factor", b1 =>
+                        {
+                            b1.Property<int>("InfusionId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<string>("Brand")
+                                .IsRequired()
+                                .HasColumnName("FactorBrand")
+                                .HasColumnType("nvarchar(50)")
+                                .HasMaxLength(50);
+
+                            b1.Property<string>("Lot")
+                                .IsRequired()
+                                .HasColumnName("FactorLot")
+                                .HasColumnType("nvarchar(20)")
+                                .HasMaxLength(20);
+
+                            b1.Property<int>("Unity")
+                                .HasColumnName("FactorUnity")
+                                .HasColumnType("int");
+
+                            b1.HasKey("InfusionId");
+
+                            b1.ToTable("Infusions");
+
+                            b1.WithOwner()
+                                .HasForeignKey("InfusionId");
+                        });
                 });
 #pragma warning restore 612, 618
         }

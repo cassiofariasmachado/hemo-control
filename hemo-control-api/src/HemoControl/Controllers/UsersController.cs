@@ -2,12 +2,11 @@ using HemoControl.Database;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using HemoControl.Entities;
-using HemoControl.Models.Users.Register;
+using HemoControl.Models.Users;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using HemoControl.Models.Users.Login;
 using HemoControl.Models.Errors;
 using HemoControl.Settings;
 using HemoControl.Interfaces.Services;
@@ -68,7 +67,16 @@ namespace HemoControl.Controllers
             if (user == default)
                 return NotFound(new ErrorResponse { Message = "User not found" });
 
-            return Ok(user);
+            return Ok(new UserResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                LastName = user.LastName,
+                Birthday = user.Birthday,
+                Email = user.Email,
+                Username = user.Username,
+                Weigth = user.Weigth
+            });
         }
 
         /// <summary>
@@ -80,7 +88,7 @@ namespace HemoControl.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
             if (user == default)
-                return NotFound(new ErrorResponse { Message = "User not found" });
+                return NotFound(new ErrorResponse { Message = "User not registered" });
 
             bool validCredentials = _passwordService.Verify(request.Password, user.Password);
 

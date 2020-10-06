@@ -14,19 +14,24 @@ namespace HemoControl.Database.Configuration
                 .IsRequired();
 
             builder.Property(i => i.UserWeigth)
-                .HasColumnType("decimal(19,5)")
-                .IsRequired();
+                .HasColumnType("decimal(19,5)");
 
-            builder.Property(i => i.FactorUnity)
-                .IsRequired();
+            builder.OwnsOne(i => i.Factor, factorBuilder =>
+            {
+                factorBuilder.Property(f => f.Unity)
+                    .HasColumnName("FactorUnity")
+                    .IsRequired();
 
-            builder.Property(i => i.FactorBrand)
-                .HasMaxLength(50)
-                .IsRequired();
+                factorBuilder.Property(i => i.Brand)
+                    .HasMaxLength(50)
+                    .HasColumnName("FactorBrand")
+                    .IsRequired();
 
-            builder.Property(i => i.FactorLot)
-                .HasMaxLength(20)
-                .IsRequired();
+                factorBuilder.Property(i => i.Lot)
+                    .HasMaxLength(20)
+                    .HasColumnName("FactorLot")
+                    .IsRequired();
+            });
 
             builder.Property(i => i.IsHemarthrosis)
                 .IsRequired();

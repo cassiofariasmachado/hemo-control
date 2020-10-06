@@ -1,4 +1,4 @@
-namespace HemoControl.Models.Users.Register
+namespace HemoControl.Models.Users
 {
     public class RegisterUserRequest
     {
