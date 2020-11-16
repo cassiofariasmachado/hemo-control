@@ -23,6 +23,14 @@ namespace HemoControl.Test.Extensions
             Assert.Equal(expected.Weigth, actual.Weigth);
         }
 
+        public static void AssertResponse(this User actual, RegisterUserResponse expected)
+        {
+            Assert.NotNull(expected);
+            Assert.NotNull(actual);
+
+            Assert.Equal(expected.Id, actual.Id);
+        }
+
         public static void AssertRequest(this User actual, RegisterUserRequest expected)
         {
             Assert.NotNull(expected);

@@ -25,6 +25,11 @@ namespace HemoControl.Test.Extensions
         public static void AssertIsCreatedResult(this IActionResult actionResult)
             => actionResult.AssertIsResult<CreatedResult>();
 
+         public static void AssertIsCreatedObjectResult<T>(this IActionResult actionResult, Action<T> assert)
+            where T : class
+            => actionResult.AssertIsObjectResult<CreatedResult, T>(assert);
+
+        
         private static void AssertIsObjectResult<TObjectResult, TResult>(this IActionResult actionResult, Action<TResult> assert)
             where TObjectResult : ObjectResult
             where TResult : class

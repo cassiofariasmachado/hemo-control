@@ -49,7 +49,7 @@ namespace HemoControl.Controllers
         /// </summary>
         [HttpPost("token")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
             if (user == default)
@@ -106,6 +106,7 @@ namespace HemoControl.Controllers
             var username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
             var infusions = await _context.Infusions
+                .Where(i => i.User.Username == username)
                 .ToListAsync(cancellationToken);
 
             return Ok(infusions.Select(InfusionResponse.Map));

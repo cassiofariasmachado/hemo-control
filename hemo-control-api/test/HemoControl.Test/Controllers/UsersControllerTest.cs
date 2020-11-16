@@ -63,14 +63,15 @@ namespace HemoControl.Test.Controllers
                 response = await controller.RegisterAsync(request, default(CancellationToken));
             }
 
-            response.AssertIsCreatedResult();
-
-            using (var context = new HemoControlContext(options))
+            response.AssertIsCreatedObjectResult<RegisterUserResponse>(async registerUserResponse =>
             {
-                var user = context.Users.FirstOrDefault(u => u.Username == request.Username);
+                using (var context = new HemoControlContext(options))
+                {
+                    var user = context.Users.FirstOrDefault(u => u.Username == request.Username);
 
-                user.AssertRequest(request);
-            }
+                    user.AssertRequest(request);
+                }
+            });
         }
 
         [Fact]
@@ -176,7 +177,7 @@ namespace HemoControl.Test.Controllers
             {
                 var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                var response = await controller.LoginAsync(request, default(CancellationToken));
+                var response = await controller.LoginAsync(request);
 
                 response.AssertIsBadRequestObjectResult<ErrorResponse>(errorResponse =>
                 {
@@ -212,7 +213,7 @@ namespace HemoControl.Test.Controllers
             {
                 var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                var response = await controller.LoginAsync(request, default(CancellationToken));
+                var response = await controller.LoginAsync(request);
 
                 response.AssertIsOkObjectResult<AccessTokenResponse>(accessTokenResponse =>
                 {
@@ -238,7 +239,7 @@ namespace HemoControl.Test.Controllers
             {
                 var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                var response = await controller.LoginAsync(request, default(CancellationToken));
+                var response = await controller.LoginAsync(request);
 
                 response.AssertIsNotFoundObjectResult<ErrorResponse>(errorResponse =>
                 {
