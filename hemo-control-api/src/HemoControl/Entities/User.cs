@@ -15,7 +15,7 @@ namespace HemoControl.Entities
         public string Password { get; private set; }
         public decimal? Weigth { get; private set; }
 
-        private List<Infusion> _infusions = new List<Infusion>();
+        private readonly List<Infusion> _infusions = new List<Infusion>();
         public IReadOnlyCollection<Infusion> Infusions => _infusions.AsReadOnly();
 
         private User() { }

@@ -67,7 +67,7 @@ namespace HemoControl.Test.Controllers
             {
                 using (var context = new HemoControlContext(options))
                 {
-                    var user = context.Users.FirstOrDefault(u => u.Username == request.Username);
+                    var user = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
 
                     user.AssertRequest(request);
                 }
