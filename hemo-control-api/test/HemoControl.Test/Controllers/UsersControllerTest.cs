@@ -12,27 +12,38 @@ using System.Threading.Tasks;
 using System.Threading;
 using HemoControl.Entities;
 using HemoControl.Models.Errors;
+using HemoControl.Test.Data;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using HemoControl.Services;
+using HemoControl.Models.Infusions;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using HemoControl.Test.Extensions;
 
 namespace HemoControl.Test.Controllers
 {
     public class UsersControllerTest
     {
-        private readonly User _user = new User("Cássio", "Farias Machado", "cassiofariasmachado@yahoo.com", "cassiofariasmachado", "12345678");
         private readonly IPasswordService _passwordService;
         private readonly IAccessTokenService _accessTokenService;
         private readonly AccessTokenSettings _accessTokenSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UsersControllerTest()
         {
             _passwordService = A.Fake<IPasswordService>();
             _accessTokenService = A.Fake<IAccessTokenService>();
             _accessTokenSettings = new AccessTokenSettings { ExpiresIn = 1000 };
+            _httpContextAccessor = A.Fake<IHttpContextAccessor>();
+            _httpContextAccessor.HttpContext = A.Fake<HttpContext>();
+            _httpContextAccessor.HttpContext.User = A.Fake<ClaimsPrincipal>();
         }
 
         [Fact]
-        public async Task RegisterUserShouldSaveTheUser()
+        public async Task RegisterUserShouldSaveCorrectly()
         {
-            var options = EntityFrameworkUtils.CreateInMemoryDbOptions<HemoControlContext>(nameof(RegisterUserShouldSaveTheUser));
+            var options = EntityFrameworkUtils.CreateInMemoryDbOptions<HemoControlContext>(nameof(RegisterUserShouldSaveCorrectly));
 
             var request = new RegisterUserRequest
             {
@@ -47,33 +58,62 @@ namespace HemoControl.Test.Controllers
 
             using (var context = new HemoControlContext(options))
             {
-                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings);
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
                 response = await controller.RegisterAsync(request, default(CancellationToken));
             }
 
+            response.AssertIsCreatedResult();
+
             using (var context = new HemoControlContext(options))
             {
-                Assert.IsType<CreatedResult>(response);
-
                 var user = context.Users.FirstOrDefault(u => u.Username == request.Username);
 
-                Assert.Equal(request.Name, user.Name);
-                Assert.Equal(request.LastName, user.LastName);
-                Assert.Equal(request.Email, user.Email);
-                Assert.Equal(request.Username, user.Username);
-                Assert.NotEqual(request.Password, user.Password);
+                user.AssertRequest(request);
             }
         }
 
         [Fact]
-        public async Task GetUserShouldReturnsTheUser()
+        public async Task RegisterUserReturnsBadRequestWhenUsernameAlreadyInUse()
         {
-            var options = EntityFrameworkUtils.CreateInMemoryDbOptions<HemoControlContext>(nameof(GetUserShouldReturnsTheUser));
+            var options = EntityFrameworkUtils.CreateInMemoryDbOptions<HemoControlContext>(nameof(RegisterUserReturnsBadRequestWhenUsernameAlreadyInUse));
+
+            var request = new RegisterUserRequest
+            {
+                Name = "Cássio",
+                LastName = "Farias Machado",
+                Email = "cfariasm@gmail.com",
+                Username = "cassiofariasmachado",
+                Password = "12345678"
+            };
 
             using (var context = new HemoControlContext(options))
             {
-                await context.AddAsync(_user);
+                await context.AddAsync(UserData.User);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = new HemoControlContext(options))
+            {
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
+
+                var response = await controller.RegisterAsync(request, default(CancellationToken));
+
+                response.AssertIsBadRequestObjectResult<ErrorResponse>(errorResponse =>
+                {
+                    Assert.Equal("Username already in use", errorResponse.Message);
+                });
+            }
+        }
+
+        [Fact]
+        public async Task GetUserShouldReturnsUserCorrectly()
+        {
+            var options = EntityFrameworkUtils.CreateInMemoryDbOptions<HemoControlContext>(nameof(GetUserShouldReturnsUserCorrectly));
+
+            using (var context = new HemoControlContext(options))
+            {
+                await context.AddAsync(UserData.User);
                 await context.SaveChangesAsync();
             }
 
@@ -81,22 +121,15 @@ namespace HemoControl.Test.Controllers
 
             using (var context = new HemoControlContext(options))
             {
-                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings);
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
                 response = await controller.GetAsync(1, default(CancellationToken));
             }
 
-            var result = Assert.IsType<OkObjectResult>(response);
-
-            var user = result.Value as UserResponse;
-
-            Assert.Equal("Cássio", user.Name);
-            Assert.Equal("Farias Machado", user.LastName);
-            Assert.Equal("cassiofariasmachado@yahoo.com", user.Email);
-            Assert.Equal("cassiofariasmachado", user.Username);
-            Assert.Null(user.Birthday);
-            Assert.Equal("cassiofariasmachado", user.Username);
-            Assert.Null(user.Weigth);
+            response.AssertIsOkObjectResult<UserResponse>(userResponse =>
+            {
+                UserData.User.AssertResponse(userResponse);
+            });
         }
 
         [Fact]
@@ -108,15 +141,15 @@ namespace HemoControl.Test.Controllers
 
             using (var context = new HemoControlContext(options))
             {
-                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings);
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
                 response = await controller.GetAsync(1, default(CancellationToken));
             }
 
-            var result = Assert.IsType<NotFoundObjectResult>(response);
-            var error = result.Value as ErrorResponse;
-
-            Assert.Equal("User not found", error.Message);
+            response.AssertIsNotFoundObjectResult<ErrorResponse>(errorResponse =>
+            {
+                Assert.Equal("User not found", errorResponse.Message);
+            });
         }
 
         [Fact]
@@ -126,7 +159,7 @@ namespace HemoControl.Test.Controllers
 
             using (var context = new HemoControlContext(options))
             {
-                await context.AddAsync(_user);
+                await context.AddAsync(UserData.User);
                 await context.SaveChangesAsync();
             }
 
@@ -139,19 +172,17 @@ namespace HemoControl.Test.Controllers
             A.CallTo(() => _passwordService.Verify(A<string>.Ignored, A<string>.Ignored))
                 .Returns(false);
 
-            IActionResult response;
-
             using (var context = new HemoControlContext(options))
             {
-                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings);
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                response = await controller.LoginAsync(request, default(CancellationToken));
+                var response = await controller.LoginAsync(request, default(CancellationToken));
+
+                response.AssertIsBadRequestObjectResult<ErrorResponse>(errorResponse =>
+                {
+                    Assert.Equal("Invalid username or password", errorResponse.Message);
+                });
             }
-
-            var result = Assert.IsType<BadRequestObjectResult>(response);
-            var error = result.Value as ErrorResponse;
-
-            Assert.Equal("Invalid username or password", error.Message);
         }
 
         [Fact]
@@ -161,7 +192,7 @@ namespace HemoControl.Test.Controllers
 
             using (var context = new HemoControlContext(options))
             {
-                await context.AddAsync(_user);
+                await context.AddAsync(UserData.User);
                 await context.SaveChangesAsync();
             }
 
@@ -177,21 +208,19 @@ namespace HemoControl.Test.Controllers
                 Password = "12345678"
             };
 
-            IActionResult response;
-
             using (var context = new HemoControlContext(options))
             {
-                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings);
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                response = await controller.LoginAsync(request, default(CancellationToken));
+                var response = await controller.LoginAsync(request, default(CancellationToken));
+
+                response.AssertIsOkObjectResult<AccessTokenResponse>(accessTokenResponse =>
+                {
+                    Assert.Equal("TOKEN", accessTokenResponse.AccessToken);
+                    Assert.Equal("Bearer", accessTokenResponse.Type);
+                    Assert.Equal(_accessTokenSettings.ExpiresIn, accessTokenResponse.ExpiresIn);
+                });
             }
-
-            var result = Assert.IsType<OkObjectResult>(response);
-            var token = result.Value as AccessTokenResponse;
-
-            Assert.Equal("TOKEN", token.AccessToken);
-            Assert.Equal("Bearer", token.Type);
-            Assert.Equal(_accessTokenSettings.ExpiresIn, token.ExpiresIn);
         }
 
         [Fact]
@@ -205,19 +234,80 @@ namespace HemoControl.Test.Controllers
                 Password = "12345678"
             };
 
+            using (var context = new HemoControlContext(options))
+            {
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
+
+                var response = await controller.LoginAsync(request, default(CancellationToken));
+
+                response.AssertIsNotFoundObjectResult<ErrorResponse>(errorResponse =>
+                {
+                    Assert.Equal("User not registered", errorResponse.Message);
+                });
+            }
+        }
+
+        [Fact]
+        public async Task GetInfusionsShouldReturnInfusions()
+        {
+            var options = EntityFrameworkUtils.CreateInMemoryDbOptions<HemoControlContext>(nameof(GetInfusionsShouldReturnInfusions));
+
+            var identity = AccessTokenService.CreateIdentity("cassiofariasmachado");
+
+            A.CallTo(() => _httpContextAccessor.HttpContext.User)
+                .Returns(new ClaimsPrincipal(identity));
+
+            using (var context = new HemoControlContext(options))
+            {
+                await context.AddAsync(UserData.User);
+                await context.AddRangeAsync(InfusionData.Infusions);
+                await context.SaveChangesAsync();
+            }
+
             IActionResult response;
 
             using (var context = new HemoControlContext(options))
             {
-                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings);
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                response = await controller.LoginAsync(request, default(CancellationToken));
+                response = await controller.GetInfusionsAsync(default(CancellationToken));
             }
 
-            var result = Assert.IsType<NotFoundObjectResult>(response);
-            var error = result.Value as ErrorResponse;
+            response.AssertIsOkObjectResult<IEnumerable<InfusionResponse>>(async infusionsResponse =>
+            {
+                using (var context = new HemoControlContext(options))
+                {
+                    var infusions = await context.Infusions
+                        .Where(i => i.User.Username == "cassiofariasmachado")
+                        .ToListAsync();
 
-            Assert.Equal("User not registered", error.Message);
+                    infusions.AssertResponse(infusionsResponse);
+                }
+            });
+        }
+
+        [Fact]
+        public async Task GetInfusionsShouldReturnEmptyWhenNotExistsInfusions()
+        {
+            var options = EntityFrameworkUtils.CreateInMemoryDbOptions<HemoControlContext>(nameof(GetInfusionsShouldReturnEmptyWhenNotExistsInfusions));
+
+            var identity = AccessTokenService.CreateIdentity("cassiofariasmachado");
+
+            A.CallTo(() => _httpContextAccessor.HttpContext.User)
+                .Returns(new ClaimsPrincipal(identity));
+
+            IActionResult response;
+
+            using (var context = new HemoControlContext(options))
+            {
+                var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
+
+                response = await controller.GetInfusionsAsync(default(CancellationToken));
+            }
+
+            response.AssertIsOkObjectResult<IEnumerable<InfusionResponse>>(
+                infusionsResponse => Assert.Empty(infusionsResponse)
+            );
         }
     }
 }

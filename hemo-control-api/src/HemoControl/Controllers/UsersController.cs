@@ -11,6 +11,9 @@ using HemoControl.Models.Errors;
 using HemoControl.Settings;
 using HemoControl.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using HemoControl.Models.Infusions;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace HemoControl.Controllers
 {
@@ -24,18 +27,42 @@ namespace HemoControl.Controllers
         private readonly IPasswordService _passwordService;
         private readonly IAccessTokenService _accessTokenService;
         private readonly AccessTokenSettings _accessTokenSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UsersController(
             HemoControlContext context,
             IPasswordService passwordService,
             IAccessTokenService accessTokenService,
-            AccessTokenSettings accessTokenSettings
+            AccessTokenSettings accessTokenSettings,
+            IHttpContextAccessor httpContextAccessor
         )
         {
             _context = context;
             _passwordService = passwordService;
             _accessTokenService = accessTokenService;
             _accessTokenSettings = accessTokenSettings;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        /// <summary>
+        /// Get an access token for the application
+        /// </summary>
+        [HttpPost("token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+            if (user == default)
+                return NotFound(new ErrorResponse { Message = "User not registered" });
+
+            bool validCredentials = _passwordService.Verify(request.Password, user.Password);
+
+            if (!validCredentials)
+                return BadRequest(new ErrorResponse { Message = "Invalid username or password" });
+
+            var accessToken = _accessTokenService.GenerateToken(user);
+
+            return Ok(new AccessTokenResponse(accessToken, _accessTokenSettings));
         }
 
         /// <summary>
@@ -63,42 +90,25 @@ namespace HemoControl.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] long id, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
             if (user == default)
                 return NotFound(new ErrorResponse { Message = "User not found" });
 
-            return Ok(new UserResponse
-            {
-                Id = user.Id,
-                Name = user.Name,
-                LastName = user.LastName,
-                Birthday = user.Birthday,
-                Email = user.Email,
-                Username = user.Username,
-                Weigth = user.Weigth
-            });
+            return Ok(UserResponse.Map(user));
         }
 
         /// <summary>
-        /// Get an access token for the application
+        /// List user infusions
         /// </summary>
-        [HttpPost("token")]
-        [AllowAnonymous]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
+        [HttpGet("infusions")]
+        public async Task<IActionResult> GetInfusionsAsync(CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
-            if (user == default)
-                return NotFound(new ErrorResponse { Message = "User not registered" });
+            var username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
-            bool validCredentials = _passwordService.Verify(request.Password, user.Password);
+            var infusions = await _context.Infusions
+                .ToListAsync(cancellationToken);
 
-            if (!validCredentials)
-                return BadRequest(new ErrorResponse { Message = "Invalid username or password" });
-
-            var accessToken = _accessTokenService.GenerateToken(user);
-
-            return Ok(new AccessTokenResponse(accessToken, _accessTokenSettings));
+            return Ok(infusions.Select(InfusionResponse.Map));
         }
     }
-
 }

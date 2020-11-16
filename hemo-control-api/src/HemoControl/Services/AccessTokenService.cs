@@ -23,14 +23,7 @@ namespace HemoControl.Services
 
         public string GenerateToken(User user)
         {
-            ClaimsIdentity identity = new ClaimsIdentity(
-                    new GenericIdentity(user.Username, "Login"),
-                    new[] {
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, user.Username)
-                    }
-                );
-
+            var identity = AccessTokenService.CreateIdentity(user.Username) as ClaimsIdentity;
             var creationDate = DateTime.Now;
             var expirationDate = creationDate +
                 TimeSpan.FromSeconds(_accessTokenSettings.ExpiresIn);
@@ -46,6 +39,17 @@ namespace HemoControl.Services
             });
 
             return _jwtSecurityTokenHandler.WriteToken(securityToken);
+        }
+
+        public static IIdentity CreateIdentity(string username)
+        {
+            return new ClaimsIdentity(
+                new GenericIdentity(username, "Login"),
+                new[] {
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
+                    new Claim(JwtRegisteredClaimNames.UniqueName, username)
+                }
+            );
         }
     }
 }

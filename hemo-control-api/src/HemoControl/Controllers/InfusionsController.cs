@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Threading;
 using HemoControl.Models.Errors;
+using Microsoft.AspNetCore.Http;
 
 namespace HemoControl.Controllers
 {
@@ -19,16 +20,18 @@ namespace HemoControl.Controllers
     public class InfusionsController : Controller
     {
         private readonly HemoControlContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public InfusionsController(HemoControlContext dbContext)
+        public InfusionsController(HemoControlContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _context = dbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddInfusionAsync([FromBody] AddInfusionRequest request, CancellationToken cancellationToken)
         {
-            var username = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var user = _context.Users.FirstOrDefault(c => c.Username == username);
 
             var factor = new Factor(request.Factor.Brand, request.Factor.Unity, request.Factor.Lot);
@@ -48,11 +51,11 @@ namespace HemoControl.Controllers
             await _context.AddAsync(infusion, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Ok();
+            return Ok(InfusionResponse.Map(infusion));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateInfusionAsync([FromRoute] int id, [FromBody] AddInfusionRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateInfusionAsync([FromRoute] int id, [FromBody] UpdateInfusionRequest request, CancellationToken cancellationToken)
         {
             var infusion = _context.Infusions.FirstOrDefault(i => i.Id == id);
             if (infusion == default)
@@ -68,7 +71,7 @@ namespace HemoControl.Controllers
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Ok();
+            return Ok(InfusionResponse.Map(infusion));
         }
 
         [HttpDelete("{id}")]
