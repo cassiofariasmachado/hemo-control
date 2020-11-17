@@ -28,6 +28,9 @@ namespace HemoControl.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Add a new infusion
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> AddInfusionAsync([FromBody] AddInfusionRequest request, CancellationToken cancellationToken)
         {
@@ -54,6 +57,9 @@ namespace HemoControl.Controllers
             return Ok(InfusionResponse.Map(infusion));
         }
 
+        /// <summary>
+        /// Update an existing infusion
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateInfusionAsync([FromRoute] int id, [FromBody] UpdateInfusionRequest request, CancellationToken cancellationToken)
         {
@@ -74,6 +80,9 @@ namespace HemoControl.Controllers
             return Ok(InfusionResponse.Map(infusion));
         }
 
+        /// <summary>
+        /// Remove an existing infusion
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveInfusionAsync([FromRoute] int id, CancellationToken cancellationToken)
         {
