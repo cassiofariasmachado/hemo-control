@@ -3,8 +3,10 @@ name: Hemo Control API
 on:
   push:
     branches: [ master ]
+    paths: hemo-control-api/**/*
   pull_request:
     branches: [ master ]
+    paths: hemo-control-api/**/*
 
 jobs:
   build:
@@ -20,7 +22,7 @@ jobs:
 
     - name: Build
       working-directory: hemo-control-api
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release
 
   test:
     runs-on: ubuntu-latest
@@ -35,7 +37,7 @@ jobs:
 
     - name: Test
       working-directory: hemo-control-api
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --verbosity normal
 
   sonar-scan:
     runs-on: ubuntu-latest
