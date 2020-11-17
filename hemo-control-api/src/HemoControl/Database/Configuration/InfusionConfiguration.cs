@@ -11,7 +11,8 @@ namespace HemoControl.Database.Configuration
             builder.HasKey(i => i.Id);
 
             builder.Property(i => i.Date)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("datetime");
 
             builder.Property(i => i.UserWeigth)
                 .HasColumnType("decimal(19,5)");

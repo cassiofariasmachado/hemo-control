@@ -3,7 +3,6 @@ using System;
 using HemoControl.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HemoControl.Migrations
@@ -16,36 +15,34 @@ namespace HemoControl.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("HemoControl.Entities.Infusion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("BleedingLocal")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<bool>("IsBleeding")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsHemarthrosis")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsTreatmentContinuation")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("TreatmentLocal")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50);
 
                     b.Property<long?>("UserId")
@@ -65,35 +62,34 @@ namespace HemoControl.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("Birthday")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(30)")
+                        .HasColumnType("varchar(30) CHARACTER SET utf8mb4")
                         .HasMaxLength(30);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                         .HasMaxLength(50);
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(60)")
+                        .HasColumnType("varchar(60) CHARACTER SET utf8mb4")
                         .HasMaxLength(60);
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
                         .HasMaxLength(100);
 
                     b.Property<decimal?>("Weigth")
@@ -113,20 +109,18 @@ namespace HemoControl.Migrations
                     b.OwnsOne("HemoControl.Entities.Factor", "Factor", b1 =>
                         {
                             b1.Property<int>("InfusionId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                                .HasColumnType("int");
 
                             b1.Property<string>("Brand")
                                 .IsRequired()
                                 .HasColumnName("FactorBrand")
-                                .HasColumnType("nvarchar(50)")
+                                .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
                                 .HasMaxLength(50);
 
                             b1.Property<string>("Lot")
                                 .IsRequired()
                                 .HasColumnName("FactorLot")
-                                .HasColumnType("nvarchar(20)")
+                                .HasColumnType("varchar(20) CHARACTER SET utf8mb4")
                                 .HasMaxLength(20);
 
                             b1.Property<int>("Unity")

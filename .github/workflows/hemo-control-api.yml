@@ -52,4 +52,26 @@ jobs:
                       -e SONAR_SECRET=${SONAR_SECRET}	
                       cassiofariasmachado/dotnet-sonarscanner:latest	
                       sh scripts/sonar-scan.sh 
+  
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Heroku Login
+      working-directory: hemo-control-api
       
+      run: heroku container:login
+
+    - name: Push image
+      working-directory: hemo-control-api
+
+      run: heroku container:push web -a hemo-control-api
+    
+    - name: Deploy release
+      working-directory: hemo-control-api
+
+      run: heroku container:release web -a hemo-control-api

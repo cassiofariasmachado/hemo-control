@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HemoControl.Migrations
@@ -12,10 +13,10 @@ namespace HemoControl.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 100, nullable: false),
-                    Birthday = table.Column<DateTime>(nullable: true),
+                    Birthday = table.Column<DateTime>(type: "datetime", nullable: true),
                     Email = table.Column<string>(maxLength: 30, nullable: false),
                     Username = table.Column<string>(maxLength: 100, nullable: false),
                     Password = table.Column<string>(maxLength: 60, nullable: false),
@@ -31,8 +32,8 @@ namespace HemoControl.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     UserWeigth = table.Column<decimal>(type: "decimal(19,5)", nullable: true),
                     FactorBrand = table.Column<string>(maxLength: 50, nullable: true),
                     FactorUnity = table.Column<int>(nullable: true),

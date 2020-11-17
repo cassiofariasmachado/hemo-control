@@ -32,6 +32,9 @@ namespace HemoControl.Database.Configuration
                 .HasMaxLength(30)
                 .IsRequired();
 
+            builder.Property(u => u.Birthday)
+                .HasColumnType("datetime");
+
             builder.Property(u => u.Weigth)
                 .HasColumnType("decimal(19,5)");
 

@@ -34,7 +34,7 @@ namespace HemoControl
             services.AddCors();
 
             services.AddDbContext<HemoControlContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("HemoControl"))
+               options.UseMySql(Configuration.GetConnectionString("HemoControl"))
             );
 
             var accessTokenSettings = new AccessTokenSettings();
@@ -115,6 +115,8 @@ namespace HemoControl
             });
 
             services.AddTransient<ExceptionMiddleware>();
+
+            services.AddHttpContextAccessor();
 
             services.AddControllers();
         }
