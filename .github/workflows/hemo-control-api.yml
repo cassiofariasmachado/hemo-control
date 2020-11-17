@@ -18,13 +18,20 @@ jobs:
       with:
         dotnet-version: 3.1.301
 
-    - name: Install dependencies
-      working-directory: hemo-control-api
-      run: dotnet restore
-
     - name: Build
       working-directory: hemo-control-api
       run: dotnet build --configuration Release --no-restore
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
 
     - name: Test
       working-directory: hemo-control-api
@@ -51,12 +58,14 @@ jobs:
                       -e SONAR_URL=${SONAR_URL}	
                       -e SONAR_SECRET=${SONAR_SECRET}	
                       cassiofariasmachado/dotnet-sonarscanner:latest	
-                      sh scripts/sonar-scan.sh 
+                      sh scripts/sonar-scan.sh
   
   deploy:
     runs-on: ubuntu-latest
     env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+    needs: [build, test]
 
     steps:
     - uses: actions/checkout@v2
