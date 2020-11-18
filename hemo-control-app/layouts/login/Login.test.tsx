@@ -5,7 +5,11 @@ import { Login } from './Login';
 describe(Login.name, () => {
     test('renders correctly', () => {
         const onLogin = jest.fn();
-        const tree = create(<Login onLogin={onLogin} />).toJSON();
+        const navigation: any = {
+            navigate: jest.fn()
+        };
+
+        const tree = create(<Login onLogin={onLogin} navigation={navigation} />).toJSON();
 
         expect(tree).toMatchSnapshot();
     });

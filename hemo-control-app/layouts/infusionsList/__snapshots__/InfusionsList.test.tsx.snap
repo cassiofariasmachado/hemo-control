@@ -1,0 +1,274 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InfusionsList renders correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "alignItems": "stretch",
+        "flexBasis": 0,
+        "flexDirection": "column",
+        "flexGrow": 1,
+        "flexShrink": 1,
+        "marginTop": 50,
+      },
+    ]
+  }
+>
+  <RCTScrollView
+    data={
+      Array [
+        Object {
+          "bleedingLocal": "Cotovelo D",
+          "date": 2020-10-04T00:58:26.000Z,
+          "factor": Object {
+            "brand": "Baxter",
+            "lot": "ABC123",
+            "unity": 1000,
+          },
+          "id": 1,
+          "isBleeding": true,
+          "isHemarthrosis": true,
+          "isTreatmentContinuation": true,
+          "treatmentLocal": "Casa",
+          "userWeigth": 82,
+        },
+        Object {
+          "bleedingLocal": "Joelho E",
+          "date": 2020-10-03T23:58:26.000Z,
+          "id": 2,
+          "isBleeding": true,
+          "isHemarthrosis": true,
+          "isTreatmentContinuation": true,
+          "treatmentLocal": "Casa",
+          "userWeigth": 82,
+        },
+      ]
+    }
+    disableVirtualization={false}
+    getItem={[Function]}
+    getItemCount={[Function]}
+    horizontal={false}
+    initialNumToRender={10}
+    keyExtractor={[Function]}
+    maxToRenderPerBatch={10}
+    onContentSizeChange={[Function]}
+    onEndReachedThreshold={2}
+    onLayout={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={50}
+    stickyHeaderIndices={Array []}
+    updateCellsBatchingPeriod={50}
+    viewabilityConfigCallbackPairs={Array []}
+    windowSize={21}
+  >
+    <View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "stretch",
+                "alignSelf": "stretch",
+                "backgroundColor": "#fff",
+                "borderRadius": 5,
+                "elevation": 3,
+                "height": 80,
+                "justifyContent": "center",
+                "marginBottom": 10,
+                "marginHorizontal": 30,
+                "marginLeft": 10,
+                "marginRight": 10,
+                "marginTop": 10,
+                "paddingBottom": 20,
+                "paddingLeft": 20,
+                "paddingRight": 20,
+                "paddingTop": 20,
+                "shadowOpacity": 0.2,
+                "shadowRadius": 2.2,
+              },
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "black",
+                  "fontSize": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "fontWeight": "bold",
+                  },
+                ]
+              }
+            >
+              Cotovelo D
+            </Text>
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "black",
+                  "fontSize": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "fontWeight": "bold",
+                  },
+                ]
+              }
+            >
+              Data e local: 
+            </Text>
+            Casa, 2020-10-3 21:58:26
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "black",
+                  "fontSize": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "fontWeight": "bold",
+                  },
+                ]
+              }
+            >
+              Fator: 
+            </Text>
+             Baxter, 1000 UI, Lote ABC123
+          </Text>
+        </View>
+      </View>
+      <View
+        onLayout={[Function]}
+        style={null}
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "stretch",
+                "alignSelf": "stretch",
+                "backgroundColor": "#fff",
+                "borderRadius": 5,
+                "elevation": 3,
+                "height": 80,
+                "justifyContent": "center",
+                "marginBottom": 10,
+                "marginHorizontal": 30,
+                "marginLeft": 10,
+                "marginRight": 10,
+                "marginTop": 10,
+                "paddingBottom": 20,
+                "paddingLeft": 20,
+                "paddingRight": 20,
+                "paddingTop": 20,
+                "shadowOpacity": 0.2,
+                "shadowRadius": 2.2,
+              },
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "black",
+                  "fontSize": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "fontWeight": "bold",
+                  },
+                ]
+              }
+            >
+              Joelho E
+            </Text>
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "black",
+                  "fontSize": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "fontWeight": "bold",
+                  },
+                ]
+              }
+            >
+              Data e local: 
+            </Text>
+            Casa, 2020-10-3 20:58:26
+          </Text>
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "black",
+                  "fontSize": 16,
+                },
+              ]
+            }
+          >
+            <Text
+              style={
+                Array [
+                  Object {
+                    "fontWeight": "bold",
+                  },
+                ]
+              }
+            >
+              Fator: 
+            </Text>
+            Não informado
+          </Text>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+</View>
+`;

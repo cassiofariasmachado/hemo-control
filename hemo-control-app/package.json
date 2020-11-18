@@ -11,7 +11,10 @@
     "sonar-scan": "sonar-scanner -Dsonar.projectKey=$PROJECT_KEY -Dsonar.organization=$SONAR_ORGANIZATION -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN"
   },
   "dependencies": {
+    "@expo/vector-icons": "^10.2.1",
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-navigation/bottom-tabs": "^5.11.1",
     "@react-navigation/native": "^5.7.4",
     "@react-navigation/stack": "^5.9.1",
     "expo": "~39.0.2",
@@ -33,6 +36,8 @@
     "@types/react-native": "~0.63.2",
     "@types/react-test-renderer": "^16.9.3",
     "@types/styled-components": "^5.1.3",
+    "babel-plugin-inline-dotenv": "^1.6.0",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "jest": "^26.4.2",
     "react-native-web": "~0.13.7",
     "react-test-renderer": "^16.13.1",

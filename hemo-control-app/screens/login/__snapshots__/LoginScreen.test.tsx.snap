@@ -98,7 +98,46 @@ exports[`LoginScreen renders correctly 1`] = `
         ]
       }
     >
-      Login
+      Entrar
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "alignSelf": "stretch",
+        "backgroundColor": "black",
+        "borderRadius": 5,
+        "justifyContent": "center",
+        "marginBottom": 15,
+        "marginHorizontal": 30,
+        "opacity": 1,
+        "paddingHorizontal": 20,
+        "paddingVertical": 15,
+      }
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#fff",
+            "fontSize": 16,
+            "fontWeight": "bold",
+          },
+        ]
+      }
+    >
+      Cadastrar-se
     </Text>
   </View>
 </View>

@@ -1,8 +1,10 @@
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import React, { useState, FC } from 'react';
 import styled from 'styled-components/native';
 
 type LoginProps = {
-    onLogin: (username: string, password: string) => void
+    onLogin: (username: string, password: string) => void,
+    navigation: NavigationProp<ParamListBase>
 }
 
 const Container = styled.View`
@@ -42,7 +44,7 @@ const LoginText = styled.Text`
     fontSize: 16px;
 `
 
-export const Login: FC<LoginProps> = ({ onLogin }) => {
+export const Login: FC<LoginProps> = ({ onLogin, navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -53,7 +55,11 @@ export const Login: FC<LoginProps> = ({ onLogin }) => {
             <Input placeholder="Senha" autoCompleteType="password" secureTextEntry={true} onChangeText={setPassword} />
 
             <LoginButton onPress={() => onLogin(username, password)}>
-                <LoginText>Login</LoginText>
+                <LoginText>Entrar</LoginText>
+            </LoginButton>
+
+            <LoginButton onPress={() => navigation.navigate('Register')}>
+                <LoginText>Cadastrar-se</LoginText>
             </LoginButton>
         </Container>
     </>;
