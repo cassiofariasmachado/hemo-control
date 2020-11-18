@@ -7,7 +7,7 @@ describe(InfusionsList.name, () => {
         const infusions = [
             {
                 id: 1,
-                date: new Date('2020-10-03T21:58:26'),
+                date: new Date('2020-10-03T21:58:26.000Z'),
                 userWeigth: 82,
                 factor: {
                     brand: 'Baxter',
@@ -22,7 +22,7 @@ describe(InfusionsList.name, () => {
             },
             {
                 id: 2,
-                date: new Date('2020-10-03T20:58:26'),
+                date: new Date('2020-10-03T20:58:26.000Z'),
                 userWeigth: 82,
                 isHemarthrosis: true,
                 isBleeding: true,

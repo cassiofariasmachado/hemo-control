@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      TZ: America/Sao_Paulo
 
     strategy:
       matrix:
@@ -34,6 +36,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    env:
+      TZ: America/Sao_Paulo
 
     strategy:
       matrix:
@@ -57,6 +61,8 @@ jobs:
 
   sonar-scan:
     runs-on: ubuntu-latest
+    env:
+      TZ: America/Sao_Paulo
 
     strategy:
       matrix:

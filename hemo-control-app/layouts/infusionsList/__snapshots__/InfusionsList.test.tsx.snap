@@ -20,7 +20,7 @@ exports[`InfusionsList renders correctly 1`] = `
       Array [
         Object {
           "bleedingLocal": "Cotovelo D",
-          "date": 2020-10-04T00:58:26.000Z,
+          "date": 2020-10-03T21:58:26.000Z,
           "factor": Object {
             "brand": "Baxter",
             "lot": "ABC123",
@@ -35,7 +35,7 @@ exports[`InfusionsList renders correctly 1`] = `
         },
         Object {
           "bleedingLocal": "Joelho E",
-          "date": 2020-10-03T23:58:26.000Z,
+          "date": 2020-10-03T20:58:26.000Z,
           "id": 2,
           "isBleeding": true,
           "isHemarthrosis": true,
@@ -141,7 +141,7 @@ exports[`InfusionsList renders correctly 1`] = `
             >
               Data e local: 
             </Text>
-            Casa, 2020-10-3 21:58:26
+            Casa, 03/10/2020 18:58:26
           </Text>
           <Text
             style={
@@ -241,7 +241,7 @@ exports[`InfusionsList renders correctly 1`] = `
             >
               Data e local: 
             </Text>
-            Casa, 2020-10-3 20:58:26
+            Casa, 03/10/2020 17:58:26
           </Text>
           <Text
             style={

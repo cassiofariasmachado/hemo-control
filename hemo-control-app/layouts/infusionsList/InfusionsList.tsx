@@ -40,12 +40,27 @@ const ListItemText = styled.Text`
 `
 
 export const InfusionsList: FC<InfusionsProps> = ({ infusions }) => {
+
+    const formatLocalAndDate = (item: InfusionResponse) => {
+        const date = new Date(item.date);
+        const day = date.getDate().toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+
+        const formatedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+
+        return `${item.treatmentLocal}, ${formatedDate}`;
+    };
+
     const renderItem = (item: InfusionResponse) => (
         <ListItem>
             <ListItemText><ListItemTitle>{item.bleedingLocal}</ListItemTitle></ListItemText>
             <ListItemText>
                 <ListItemTitle>Data e local: </ListItemTitle>
-                {`${item.treatmentLocal}, ${new Date(item.date).toLocaleDateString()} ${new Date(item.date).toLocaleTimeString()}`}
+                {formatLocalAndDate(item)}
             </ListItemText>
             <ListItemText>
                 <ListItemTitle>Fator: </ListItemTitle>
