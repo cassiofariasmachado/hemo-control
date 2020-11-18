@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using HemoControl.Models.Infusions;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using HemoControl.Extensions;
 
 namespace HemoControl.Controllers
 {
@@ -101,15 +102,18 @@ namespace HemoControl.Controllers
         /// List user infusions
         /// </summary>
         [HttpGet("infusions")]
-        public async Task<IActionResult> GetInfusionsAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetInfusionsAsync([FromQuery] GetInfusionsRequest request, CancellationToken cancellationToken)
         {
             var username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
 
+            bool dateIntervalInformed = request.StartDate.HasValue && request.EndDate.HasValue;
+
             var infusions = await _context.Infusions
                 .Where(i => i.User.Username == username)
-                .ToListAsync(cancellationToken);
+                .Where(i => !dateIntervalInformed || i.Date >= request.StartDate && i.Date <= request.EndDate)
+                .ToPagedResponseAsync(request, cancellationToken);
 
-            return Ok(infusions.Select(InfusionResponse.Map));
+            return Ok(infusions.Map(InfusionResponse.Map));
         }
     }
 }

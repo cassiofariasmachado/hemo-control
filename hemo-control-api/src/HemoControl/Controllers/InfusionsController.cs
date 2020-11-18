@@ -37,7 +37,7 @@ namespace HemoControl.Controllers
             var username = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var user = _context.Users.FirstOrDefault(c => c.Username == username);
 
-            var factor = new Factor(request.Factor.Brand, request.Factor.Unity, request.Factor.Lot);
+            var factor = new Factor(request.Factor?.Brand, (request.Factor?.Unity).GetValueOrDefault(), request.Factor?.Lot);
             var infusion = new Infusion(
                 request.Date,
                 factor,

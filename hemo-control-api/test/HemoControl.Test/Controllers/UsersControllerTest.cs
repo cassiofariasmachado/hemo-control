@@ -20,6 +20,7 @@ using HemoControl.Models.Infusions;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using HemoControl.Test.Extensions;
+using HemoControl.Models.Shared;
 
 namespace HemoControl.Test.Controllers
 {
@@ -271,7 +272,7 @@ namespace HemoControl.Test.Controllers
             {
                 var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                response = await controller.GetInfusionsAsync(default(CancellationToken));
+                response = await controller.GetInfusionsAsync(new GetInfusionsRequest(), default(CancellationToken));
             }
 
             response.AssertIsOkObjectResult<IEnumerable<InfusionResponse>>(async infusionsResponse =>
@@ -303,11 +304,11 @@ namespace HemoControl.Test.Controllers
             {
                 var controller = new UsersController(context, _passwordService, _accessTokenService, _accessTokenSettings, _httpContextAccessor);
 
-                response = await controller.GetInfusionsAsync(default(CancellationToken));
+                response = await controller.GetInfusionsAsync(new GetInfusionsRequest(), default(CancellationToken));
             }
 
-            response.AssertIsOkObjectResult<IEnumerable<InfusionResponse>>(
-                infusionsResponse => Assert.Empty(infusionsResponse)
+            response.AssertIsOkObjectResult<PagedResponse<InfusionResponse>>(
+                infusionsResponse => Assert.Empty(infusionsResponse.Items)
             );
         }
     }
